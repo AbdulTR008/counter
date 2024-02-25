@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,7 +8,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Counter'),
+      home: const MyHomePage(title: 'Iteration Counter'),
     );
   }
 }
@@ -56,7 +56,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     number.clear();
     quantity.clear();
@@ -67,46 +66,89 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).primaryColor,
+        title: Text(
+          widget.title,
+          style: TextStyle(color: Colors.white),
+        ),
       ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(hintText: "number"),
-                keyboardType: TextInputType.number,
-                controller: number,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            AnimatedTextKit(isRepeatingAnimation: true, animatedTexts: [
+              WavyAnimatedText('Ilailabs',
+                  textStyle: TextStyle(
+                      fontSize: 30, color: Theme.of(context).primaryColor))
+            ]),
+            const SizedBox(
+              height: 20,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  hintText: "number",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30))),
+              keyboardType: TextInputType.number,
+              controller: number,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  hintText: "quantity",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30))),
+              keyboardType: TextInputType.number,
+              controller: quantity,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            TextField(
+              decoration: InputDecoration(
+                  hintText: "limit",
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30))),
+              keyboardType: TextInputType.number,
+              controller: limit,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            ElevatedButton(
+                onPressed: () {
+                  iteration(double.parse(number.text),
+                      double.parse(quantity.text), double.parse(limit.text));
+                },
+                style: ElevatedButton.styleFrom(
+                  elevation: 10,
+                  foregroundColor: Colors.white,
+                  backgroundColor: Theme.of(context).primaryColor,
+                ),
+                child: Text('Calculate')),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.teal, borderRadius: BorderRadius.circular(5)),
+              height: 40,
+              width: 100,
+              child: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: Center(
+                  child: Text(
+                    'Iteration = ${result ?? 0}',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               ),
-              TextField(
-                decoration: InputDecoration(hintText: "quantity"),
-                keyboardType: TextInputType.number,
-                controller: quantity,
-              ),
-              TextField(
-                decoration: InputDecoration(hintText: "limit"),
-                keyboardType: TextInputType.number,
-                controller: limit,
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              Text(
-                'Iteration = ${result ?? 0}',
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(
-                  onPressed: () {
-                    iteration(double.parse(number.text),
-                        double.parse(quantity.text), double.parse(limit.text));
-                  },
-                  child: Text('Calculate')),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
